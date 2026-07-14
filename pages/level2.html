@@ -3,234 +3,455 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Егору · замок</title>
+  <title>Егору · PostgreSQL</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Archivo+Black&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <style>
+    :root {
+      color-scheme: dark;
+      --bg: #150d1c;
+      --panel: rgba(31, 17, 42, 0.88);
+      --border: rgba(224, 142, 255, 0.18);
+      --text: #f8f1ff;
+      --muted: #c6b5d9;
+      --accent: #f58fff;
+      --accent-2: #f0ca6b;
+      --ok: #9effc2;
+      --bad: #ff9999;
+    }
+
     body {
-      font-family: 'IBM Plex Mono', monospace;
-      color: #d7e0ea;
-      background:
-        repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 3px),
-        linear-gradient(180deg, #12161c 0%, #1b232e 100%);
+      margin: 0;
       min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 15%, rgba(245, 143, 255, 0.16), transparent 26%),
+        radial-gradient(circle at 75% 20%, rgba(240, 202, 107, 0.12), transparent 24%),
+        linear-gradient(180deg, #0e0813 0%, #160d1f 100%);
     }
 
     .page {
-      width: min(560px, calc(100% - 2rem));
+      width: min(1180px, calc(100% - 2rem));
       margin: 0 auto;
-      padding: 3rem 0 4rem;
+      padding: 2.5rem 0 3rem;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 2rem;
     }
 
     .lvl {
-      color: #6fa8ff;
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
+      font-size: 0.77rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      margin-bottom: 0.5rem;
+      color: var(--accent);
+      margin-bottom: 0.55rem;
     }
 
     h1 {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: clamp(1.7rem, 5vw, 2.3rem);
-      margin: 0 0 0.75rem;
-      letter-spacing: 0.02em;
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 0.96;
+      font-weight: 800;
+      max-width: 10ch;
     }
 
     .lead {
-      margin: 0 0 1.5rem;
-      line-height: 1.5;
-      color: #9aa8b8;
-      max-width: 40ch;
+      margin: 0.9rem 0 0;
+      max-width: 48ch;
+      color: var(--muted);
+      line-height: 1.6;
     }
 
-    .locker {
-      border: 2px solid #3a4656;
-      background: linear-gradient(160deg, #2a3340, #1a2029);
-      padding: 1.5rem;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), 0 12px 30px rgba(0,0,0,0.35);
-      animation: boot 0.55s ease both;
+    .help {
+      width: min(320px, 100%);
+      border: 1px solid var(--border);
+      background: rgba(16, 10, 22, 0.88);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 1rem;
     }
 
-    .row {
+    .help-head, .help-btn {
+      padding: 0.95rem 1rem;
+    }
+
+    .help-head {
+      border-bottom: 1px solid var(--border);
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
+      align-items: center;
+      font-weight: 700;
     }
 
-    .door {
-      flex: 1;
-      height: 120px;
-      border: 1px solid #4a5768;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,0.04), transparent 30%),
-        #242c38;
-      position: relative;
+    .help small {
+      color: var(--muted);
+      font-weight: 500;
     }
 
-    .door::after {
-      content: "";
-      position: absolute;
-      right: 18px;
-      top: 50%;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #111;
-      transform: translateY(-50%);
-      box-shadow: inset 0 0 0 2px #666;
+    .help-step {
+      display: none;
+      padding: 1rem;
+      border-bottom: 1px solid rgba(224, 142, 255, 0.14);
     }
 
-    .lamp {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #ff5a4a;
-      box-shadow: 0 0 12px #ff5a4a;
-      animation: blink-red 1.4s step-end infinite;
+    .help-step.show {
+      display: block;
     }
 
-    .lamp.open {
-      background: #3dff8a;
-      box-shadow: 0 0 14px #3dff8a;
-      animation: none;
+    .help-label {
+      display: inline-block;
+      margin-bottom: 0.45rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-2);
     }
 
-    .status {
-      font-size: 0.95rem;
-      margin: 0 0 1rem;
+    .help-step p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.94rem;
     }
 
-    .btn {
-      border: 1px solid #6fa8ff;
-      background: #6fa8ff;
-      color: #0b1220;
-      font-weight: 600;
-      padding: 0.75rem 1.1rem;
+    .help-btn {
+      width: 100%;
+      border: none;
+      border-top: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      text-align: left;
       cursor: pointer;
     }
 
-    .btn:hover { filter: brightness(1.06); }
-    .btn:disabled { opacity: 0.5; cursor: wait; }
-
-    .btn-ghost {
-      margin-left: 0.5rem;
-      background: transparent;
-      color: #d7e0ea;
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.85fr);
+      gap: 1.25rem;
+      align-items: start;
     }
 
-    .msg { min-height: 1.3em; margin: 0.8rem 0 0; font-size: 0.9rem; }
-    .msg.bad { color: #ff8b7c; }
-    .msg.ok { color: #7dffb0; }
-
-    .hints {
-      margin-top: 1.75rem;
-      border-top: 1px dashed #334053;
-      padding-top: 0.9rem;
-      font-size: 0.85rem;
-      color: #7f8c9c;
+    .panel {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+      overflow: hidden;
     }
 
-    .hints details { margin-top: 0.45rem; }
-    .hints summary { cursor: pointer; color: #9aa8b8; }
-    .hints p { margin: 0.4rem 0 0; line-height: 1.45; }
-
-    @keyframes boot {
-      from { opacity: 0; transform: scale(0.98); }
-      to { opacity: 1; transform: scale(1); }
+    .sql-head {
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
     }
 
-    @keyframes blink-red {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.25; }
+    .badge {
+      padding: 0.45rem 0.7rem;
+      background: rgba(245, 143, 255, 0.08);
+      color: var(--accent);
+      border: 1px solid rgba(245, 143, 255, 0.18);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+    }
+
+    .body {
+      padding: 1.2rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .task {
+      padding: 1rem;
+      border: 1px solid rgba(224, 142, 255, 0.14);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .task p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .console {
+      padding: 1rem;
+      border: 1px solid rgba(224, 142, 255, 0.14);
+      background: #0f0815;
+    }
+
+    pre, code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      line-height: 1.65;
+      color: #f5e5ff;
+      font-size: 0.9rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.94rem;
+    }
+
+    th, td {
+      padding: 0.8rem 0.75rem;
+      border-bottom: 1px solid rgba(224, 142, 255, 0.12);
+      text-align: left;
+    }
+
+    th {
+      color: #f4d98b;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    td {
+      color: var(--text);
+    }
+
+    .submit {
+      padding: 1.2rem;
+      display: grid;
+      gap: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid rgba(224, 142, 255, 0.24);
+      background: #120b18;
+      color: var(--text);
+      padding: 0.95rem 1rem;
+      font: inherit;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+    }
+
+    button.primary {
+      border: none;
+      background: linear-gradient(90deg, #f58fff, #f0ca6b);
+      color: #170b1e;
+      font-weight: 800;
+      padding: 0.95rem 1.2rem;
+      cursor: pointer;
+    }
+
+    button.primary:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+
+    .msg {
+      min-height: 1.35em;
+      margin: 0;
+      font-size: 0.92rem;
+    }
+
+    .msg.bad { color: var(--bad); }
+    .msg.ok { color: var(--ok); }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        flex-direction: column;
+      }
+
+      .help {
+        width: 100%;
+        position: static;
+      }
+
+      table {
+        font-size: 0.88rem;
+      }
     }
   </style>
 </head>
 <body>
   <main class="page">
-    <div class="lvl">Уровень 2 / 3</div>
-    <h1>Ячейка с замком</h1>
-    <p class="lead">Сервер замок не держит — его состояние лежит у тебя в браузере. Переключи и проверь.</p>
-
-    <section class="locker">
-      <div class="row">
-        <div class="door" aria-hidden="true"></div>
-        <div class="lamp" id="lamp" title="индикатор"></div>
+    <div class="topbar">
+      <div>
+        <div class="lvl">Уровень 2 / 3</div>
+        <h1>PostgreSQL Mindset</h1>
+        <p class="lead">Теперь без фронтовых фокусов. Представь, что тебе дали данные из StoreBook и попросили достать нужное поле. Не книга, не id. Нужен автор.</p>
       </div>
-      <p class="status" id="status">Статус: LOCK / on</p>
-      <button class="btn" id="check" type="button">Проверить замок</button>
-      <button class="btn btn-ghost" id="refresh" type="button">Обновить статус</button>
-      <p class="msg" id="msg" aria-live="polite"></p>
-    </section>
 
-    <div class="hints">
-      <details>
-        <summary>Подсказка 1</summary>
-        <p>Посмотри localStorage для этого сайта. Там должен быть ключ <code>gift_lock</code>.</p>
-      </details>
-      <details>
-        <summary>Подсказка 2</summary>
-        <p>Поставь значение <code>off</code> вместо <code>on</code>, потом нажми «Проверить замок».</p>
-      </details>
+      <aside class="help" aria-label="Помощь">
+        <div class="help-head">
+          <span>Помощь</span>
+          <small id="help-count">1 из 3</small>
+        </div>
+        <div class="help-step show">
+          <span class="help-label">Подсказка 1</span>
+          <p>Думай как будто пишешь <code>SELECT</code>. Нужна не вся строка, а одно конкретное поле.</p>
+        </div>
+        <div class="help-step">
+          <span class="help-label">Подсказка 2</span>
+          <p>Сначала отфильтруй книги по условиям, а уже потом выбери ту, которая подходит лучше остальных.</p>
+        </div>
+        <div class="help-step">
+          <span class="help-label">Подсказка 3</span>
+          <p>Среди подходящих книг нужен автор самой дорогой позиции, которая есть в наличии и издана до 2000 года.</p>
+        </div>
+        <button class="help-btn" id="help-btn" type="button">Открыть следующую подсказку</button>
+      </aside>
     </div>
+
+    <section class="layout">
+      <div class="panel">
+        <div class="sql-head">
+          <strong>books</strong>
+          <span class="badge">postgres / StoreBook</span>
+        </div>
+
+        <div class="body">
+          <div class="task">
+            <p>Запрос по смыслу такой: найти автора книги, которая <strong>есть в наличии</strong>, была <strong>издана до 2000 года</strong>, а среди подходящих имеет <strong>максимальную цену</strong>. Ответ отправь в поле ниже.</p>
+          </div>
+
+          <div class="console">
+            <pre>select nameAuthor
+from books
+where amount &gt; 0 and publishedYear &lt; 2000
+order by price desc
+limit 1;</pre>
+          </div>
+
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th>title</th>
+                  <th>author</th>
+                  <th>genre</th>
+                  <th>price</th>
+                  <th>amount</th>
+                  <th>year</th>
+                </tr>
+              </thead>
+              <tbody id="rows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="submit">
+          <label for="author">Имя автора</label>
+          <input id="author" type="text" autocomplete="off" spellcheck="false" placeholder="например Владимир Сорокин">
+          <button class="primary" id="submit" type="button">Проверить ответ</button>
+          <p class="msg" id="msg" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script>
-    const KEY = 'gift_lock';
-    const statusEl = document.getElementById('status');
-    const lamp = document.getElementById('lamp');
+    const helpSteps = Array.from(document.querySelectorAll('.help-step'));
+    const helpBtn = document.getElementById('help-btn');
+    const helpCount = document.getElementById('help-count');
+    let openHints = 1;
+
+    helpBtn.addEventListener('click', () => {
+      if (openHints >= helpSteps.length) {
+        helpBtn.disabled = true;
+        helpBtn.textContent = 'Подсказки закончились';
+        return;
+      }
+
+      helpSteps[openHints].classList.add('show');
+      openHints += 1;
+      helpCount.textContent = `${openHints} из ${helpSteps.length}`;
+
+      if (openHints >= helpSteps.length) {
+        helpBtn.textContent = 'Подсказки закончились';
+      }
+    });
+
+    const rows = document.getElementById('rows');
+    const input = document.getElementById('author');
     const msg = document.getElementById('msg');
-    const checkBtn = document.getElementById('check');
+    const btn = document.getElementById('submit');
 
-    function ensureLock() {
-      if (localStorage.getItem(KEY) === null) localStorage.setItem(KEY, 'on');
-    }
+    fetch('/api/storebook/books/all')
+      .then((res) => res.json())
+      .then((books) => {
+        rows.innerHTML = books.map((book) => `
+          <tr>
+            <td>${book.title}</td>
+            <td>${book.nameAuthor}</td>
+            <td>${book.nameGenre}</td>
+            <td>${book.price}</td>
+            <td>${book.amount}</td>
+            <td>${book.publishedYear}</td>
+          </tr>
+        `).join('');
+      })
+      .catch(() => {
+        rows.innerHTML = '<tr><td colspan="6">Не удалось получить данные.</td></tr>';
+      });
 
-    function renderStatus() {
-      ensureLock();
-      const value = localStorage.getItem(KEY);
-      const open = value === 'off';
-      statusEl.textContent = open ? 'Статус: OPEN / off' : 'Статус: LOCK / on';
-      lamp.classList.toggle('open', open);
-    }
-
-    async function checkLock() {
-      ensureLock();
+    async function submitAuthor() {
       msg.className = 'msg';
       msg.textContent = 'Проверяю...';
-      checkBtn.disabled = true;
+      btn.disabled = true;
+
       try {
         const res = await fetch('/api/check-lock', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ lock: localStorage.getItem(KEY) })
+          body: JSON.stringify({ author: input.value })
         });
         const data = await res.json();
+
         if (data.success) {
           msg.className = 'msg ok';
-          msg.textContent = 'Открыто. Дальше.';
+          msg.textContent = 'Да, этого автора и искали.';
           setTimeout(() => { window.location.href = data.redirectUrl; }, 700);
-        } else {
-          msg.className = 'msg bad';
-          msg.textContent = data.message || 'Ещё закрыто.';
-          checkBtn.disabled = false;
-          renderStatus();
+          return;
         }
-      } catch (e) {
+
+        msg.className = 'msg bad';
+        msg.textContent = data.message || 'Пока не то.';
+        btn.disabled = false;
+      } catch (error) {
         msg.className = 'msg bad';
         msg.textContent = 'Ошибка сети.';
-        checkBtn.disabled = false;
+        btn.disabled = false;
       }
     }
 
-    ensureLock();
-    renderStatus();
-    document.getElementById('refresh').addEventListener('click', renderStatus);
-    checkBtn.addEventListener('click', checkLock);
+    btn.addEventListener('click', submitAuthor);
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') submitAuthor();
+    });
   </script>
 </body>
 </html>

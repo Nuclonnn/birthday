@@ -3,247 +3,417 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Егору · торт</title>
+  <title>Егору · книга</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <style>
+    :root {
+      color-scheme: dark;
+      --bg: #1b140f;
+      --paper: #f3e7d2;
+      --ink: #2e2118;
+      --muted: #7a6657;
+      --line: rgba(46, 33, 24, 0.14);
+      --accent: #a45f33;
+      --panel: rgba(31, 22, 17, 0.82);
+      --panel-border: rgba(243, 231, 210, 0.14);
+      --text: #f8f1e6;
+      --text-muted: #d2c2b0;
+      --ok: #9ed9a0;
+      --bad: #ff9f8f;
+    }
+
     body {
-      font-family: 'Space Grotesk', sans-serif;
-      color: #f7efe4;
-      background:
-        radial-gradient(ellipse at 50% 0%, rgba(255, 170, 60, 0.16), transparent 45%),
-        #140f0c;
+      margin: 0;
       min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 14%, rgba(255, 204, 145, 0.12), transparent 25%),
+        radial-gradient(circle at 78% 10%, rgba(164, 95, 51, 0.15), transparent 22%),
+        linear-gradient(180deg, #130e0b 0%, #1a1410 100%);
     }
 
     .page {
-      width: min(560px, calc(100% - 2rem));
+      width: min(1180px, calc(100% - 2rem));
       margin: 0 auto;
-      padding: 3rem 0 4rem;
-      text-align: center;
+      padding: 2.5rem 0 3rem;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 2rem;
     }
 
     .lvl {
-      color: #f0a202;
-      font-size: 0.75rem;
-      letter-spacing: 0.14em;
+      font-size: 0.77rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      margin-bottom: 0.5rem;
+      color: #d9b486;
+      margin-bottom: 0.55rem;
     }
 
     h1 {
-      margin: 0 0 0.6rem;
-      font-size: clamp(1.8rem, 5vw, 2.4rem);
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.3rem, 6vw, 4.2rem);
+      line-height: 0.92;
+      font-weight: 700;
+      max-width: 8ch;
     }
 
     .lead {
-      margin: 0 auto 1.25rem;
-      max-width: 36ch;
-      color: rgba(247, 239, 228, 0.75);
-      line-height: 1.5;
+      margin: 0.9rem 0 0;
+      max-width: 48ch;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .help {
+      width: min(320px, 100%);
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 1rem;
+    }
+
+    .help-head, .help-btn {
+      padding: 0.95rem 1rem;
+    }
+
+    .help-head {
+      border-bottom: 1px solid var(--panel-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+    }
+
+    .help small {
+      color: var(--text-muted);
       font-weight: 500;
     }
 
-    .stage {
+    .help-step {
+      display: none;
+      padding: 1rem;
+      border-bottom: 1px solid rgba(243, 231, 210, 0.1);
+    }
+
+    .help-step.show {
+      display: block;
+    }
+
+    .help-label {
       display: inline-block;
-      padding: 1.25rem 1.5rem 1rem;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(240, 162, 2, 0.25);
-      animation: rise 0.7s ease both;
+      margin-bottom: 0.45rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #d9b486;
     }
 
-    .candles {
-      display: flex;
-      justify-content: center;
-      gap: 1.1rem;
-      margin-bottom: 0.35rem;
+    .help-step p {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.55;
+      font-size: 0.94rem;
     }
 
-    .candle {
-      width: 10px;
-      height: 36px;
-      background: linear-gradient(#f7efe4, #d9c3a0);
-      border-radius: 2px;
-      position: relative;
-    }
-
-    .candle::before {
-      content: "";
-      position: absolute;
-      top: -14px;
-      left: 50%;
-      width: 10px;
-      height: 14px;
-      transform: translateX(-50%);
-      background: #ffb347;
-      border-radius: 50% 50% 40% 40%;
-      box-shadow: 0 0 10px #ff9f1c;
-      animation: flicker 0.35s infinite alternate;
-    }
-
-    .candle:nth-child(2)::before { animation-delay: 0.1s; }
-    .candle:nth-child(3)::before { animation-delay: 0.2s; }
-
-    .cake-body {
-      width: min(280px, 70vw);
-      margin: 0 auto;
-    }
-
-    .layer {
-      height: 34px;
-      margin: 0 auto;
-      border-radius: 6px;
-    }
-
-    .layer.top {
-      width: 70%;
-      background: #f2b8c6;
-      border: 2px solid #e89aac;
-    }
-
-    .layer.mid {
-      width: 85%;
-      margin-top: 4px;
-      background: #f0d5a8;
-      border: 2px solid #e0bf86;
-    }
-
-    .layer.base {
+    .help-btn {
       width: 100%;
-      margin-top: 4px;
-      height: 42px;
-      background: #c9886a;
-      border: 2px solid #b06f52;
+      border: none;
+      border-top: 1px solid var(--panel-border);
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
     }
 
-    .ribbon {
-      margin-top: 0.9rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.35rem;
-      letter-spacing: 0.35em;
-      color: #f0a202;
-      font-weight: 600;
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.85fr);
+      gap: 1.25rem;
+      align-items: start;
     }
 
-    .note {
-      margin: 1.25rem auto 0;
-      max-width: 40ch;
-      color: rgba(247, 239, 228, 0.7);
-      font-size: 0.95rem;
-      line-height: 1.45;
+    .book {
+      background: var(--paper);
+      color: var(--ink);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.26);
+      padding: 1.5rem;
+    }
+
+    .book-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: start;
+      margin-bottom: 1.2rem;
+    }
+
+    .caption {
+      font-size: 0.76rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .book h2 {
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 0.95;
+      font-weight: 700;
+    }
+
+    .meta {
+      min-width: 180px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-align: right;
+      line-height: 1.55;
+    }
+
+    .sheet {
+      border: 1px solid var(--line);
+      padding: 1.2rem;
+      background:
+        linear-gradient(transparent 31px, rgba(46, 33, 24, 0.06) 32px),
+        linear-gradient(90deg, rgba(164, 95, 51, 0.14) 0 1px, transparent 1px);
+      background-size: 100% 32px, 100% 100%;
+    }
+
+    .sheet p {
+      margin: 0 0 1rem;
+      line-height: 2;
+      font-size: 1.02rem;
+    }
+
+    .quote-card {
+      margin-top: 1rem;
+      padding: 1rem;
+      border: 1px dashed rgba(46, 33, 24, 0.2);
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .quote-card p {
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      line-height: 1.05;
+    }
+
+    .quote-note {
+      margin-top: 0.45rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .submit {
+      margin-top: 1rem;
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid rgba(46, 33, 24, 0.18);
+      background: rgba(255, 255, 255, 0.55);
+      color: var(--ink);
+      padding: 0.95rem 1rem;
+      font: inherit;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+    }
+
+    button.primary {
+      border: none;
+      background: var(--accent);
+      color: #fff6ed;
+      font-weight: 700;
+      padding: 0.95rem 1.2rem;
+      cursor: pointer;
+    }
+
+    button.primary:disabled {
+      opacity: 0.55;
+      cursor: wait;
     }
 
     .msg {
-      min-height: 1.3em;
-      margin: 1rem 0 0;
-      font-size: 0.9rem;
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .msg.bad { color: #ff8f7a; }
-    .msg.ok { color: #9ed9a0; }
-
-    .hints {
-      margin-top: 1.75rem;
-      text-align: left;
-      border-top: 1px dashed rgba(240, 162, 2, 0.25);
-      padding-top: 0.9rem;
-      font-size: 0.85rem;
-      color: rgba(247, 239, 228, 0.55);
+      min-height: 1.35em;
+      margin: 0;
+      font-size: 0.92rem;
     }
 
-    .hints details { margin-top: 0.45rem; }
-    .hints summary { cursor: pointer; color: rgba(247, 239, 228, 0.7); }
-    .hints p { margin: 0.4rem 0 0; line-height: 1.45; }
+    .msg.bad { color: var(--bad); }
+    .msg.ok { color: var(--ok); }
 
-    @keyframes flicker {
-      from { transform: translateX(-50%) scale(1); opacity: 0.85; }
-      to { transform: translateX(-50%) scale(1.15) translateY(-1px); opacity: 1; }
-    }
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
 
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
+      .topbar {
+        flex-direction: column;
+      }
+
+      .help {
+        width: 100%;
+        position: static;
+      }
+
+      .book-top {
+        flex-direction: column;
+      }
+
+      .meta {
+        text-align: left;
+      }
     }
   </style>
 </head>
 <body>
   <main class="page">
-    <div class="lvl">Уровень 3 / 3</div>
-    <h1>Торт</h1>
-    <p class="lead">Кнопок больше нет. На ленте шифр. Свечи тоже не просто так стоят.</p>
+    <div class="topbar">
+      <div>
+        <div class="lvl">Уровень 3 / 3</div>
+        <h1>Литературная полка</h1>
+        <p class="lead">Последний уровень без обязательных танцев с DevTools. Если помнишь книгу, будет быстрее. Если не помнишь, страница все равно не оставила тебя без следов.</p>
+      </div>
 
-    <div class="stage">
-      <div class="candles" aria-hidden="true">
-        <div class="candle"></div>
-        <div class="candle"></div>
-        <div class="candle"></div>
-      </div>
-      <div class="cake-body" aria-hidden="true">
-        <div class="layer top"></div>
-        <div class="layer mid"></div>
-        <div class="layer base"></div>
-      </div>
-      <div class="ribbon" id="ribbon">WRUW</div>
+      <aside class="help" aria-label="Помощь">
+        <div class="help-head">
+          <span>Помощь</span>
+          <small id="help-count">1 из 2</small>
+        </div>
+        <div class="help-step show">
+          <span class="help-label">Подсказка 1</span>
+          <p>Фраза связана с <em>Голубым салом</em>. Если не помнишь ее целиком, смотри на пометки на листе.</p>
+        </div>
+        <div class="help-step">
+          <span class="help-label">Подсказка 2</span>
+          <p>На странице уже лежит заготовка: не хватает только первого слова перед <code>хорошо горят</code>.</p>
+        </div>
+        <button class="help-btn" id="help-btn" type="button">Открыть следующую подсказку</button>
+      </aside>
     </div>
 
-    <p class="note">Разгадай слово на ленте и передай его странице правильным способом.</p>
-    <p class="msg" id="msg" aria-live="polite"></p>
+    <section class="layout">
+      <article class="book">
+        <div class="book-top">
+          <div>
+            <div class="caption">карточка читателя</div>
+            <h2>Голубое сало</h2>
+          </div>
+          <div class="meta">
+            автор: Владимир Сорокин<br>
+            пометка на полях: крылатые фразы запоминаются лучше сюжета<br>
+            статус: дочитай и скажи вслух нормально
+          </div>
+        </div>
 
-    <div class="hints">
-      <details>
-        <summary>Подсказка 1</summary>
-        <p>Открой консоль браузера — там написано, какую функцию вызвать.</p>
-      </details>
-      <details>
-        <summary>Подсказка 2</summary>
-        <p>На ленте шифр Цезаря. Сдвиг равен числу свечей (3). Полученное слово передай в эту функцию в кавычках.</p>
-      </details>
-    </div>
+        <div class="sheet">
+          <p>Заметка оставлена почти честная: если ты читал, то, вероятно, узнаешь фразу быстрее, чем откроешь подсказки. Если не читал, то все равно не страшно: нужные слова лежат прямо здесь, просто не одной строкой.</p>
+          <p>Внизу сохранили обрывок цитаты. Его не надо анализировать как ребус, не надо шифровать, не надо передавать в консоль. Просто восстанови полную фразу и отправь ее как есть.</p>
+
+          <div class="quote-card">
+            <p>... хорошо горят</p>
+            <div class="quote-note">Редакторская приписка: начало стерлось, но речь явно про то, что люди обычно читают, хранят и советуют друг другу.</div>
+          </div>
+
+          <div class="submit">
+            <label for="quote">Фраза целиком</label>
+            <input id="quote" type="text" autocomplete="off" spellcheck="false" placeholder="восстанови цитату полностью">
+            <button class="primary" id="submit" type="button">Отправить</button>
+            <p class="msg" id="msg" aria-live="polite"></p>
+          </div>
+        </div>
+      </article>
+    </section>
   </main>
 
   <script>
-    const msg = document.getElementById('msg');
+    const helpSteps = Array.from(document.querySelectorAll('.help-step'));
+    const helpBtn = document.getElementById('help-btn');
+    const helpCount = document.getElementById('help-count');
+    let openHints = 1;
 
-    window.makeAWish = async function makeAWish(wish) {
-      if (typeof wish !== 'string' || !wish.trim()) {
-        msg.className = 'msg bad';
-        msg.textContent = 'Нужна строка, например makeAWish("word")';
-        return { success: false };
+    helpBtn.addEventListener('click', () => {
+      if (openHints >= helpSteps.length) {
+        helpBtn.disabled = true;
+        helpBtn.textContent = 'Подсказки закончились';
+        return;
       }
 
+      helpSteps[openHints].classList.add('show');
+      openHints += 1;
+      helpCount.textContent = `${openHints} из ${helpSteps.length}`;
+
+      if (openHints >= helpSteps.length) {
+        helpBtn.textContent = 'Подсказки закончились';
+      }
+    });
+
+    const input = document.getElementById('quote');
+    const msg = document.getElementById('msg');
+    const btn = document.getElementById('submit');
+
+    async function submitQuote() {
       msg.className = 'msg';
       msg.textContent = 'Проверяю...';
+      btn.disabled = true;
 
       try {
         const res = await fetch('/api/check-wish', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ wish })
+          body: JSON.stringify({ quote: input.value })
         });
         const data = await res.json();
+
         if (data.success) {
           msg.className = 'msg ok';
-          msg.textContent = 'Сработало.';
+          msg.textContent = 'Да. Этого было достаточно.';
           setTimeout(() => { window.location.href = data.redirectUrl; }, 700);
-          return data;
+          return;
         }
+
         msg.className = 'msg bad';
-        msg.textContent = data.message || 'Неверно.';
-        return data;
-      } catch (e) {
+        msg.textContent = data.message || 'Пока не совпало.';
+        btn.disabled = false;
+      } catch (error) {
         msg.className = 'msg bad';
         msg.textContent = 'Ошибка сети.';
-        return { success: false };
+        btn.disabled = false;
       }
-    };
+    }
 
-    console.log(
-      '%cmakeAWish("...")%c — сюда слово с ленты после расшифровки',
-      'color:#f0a202;font-weight:700',
-      'color:#9a8b78'
-    );
+    btn.addEventListener('click', submitQuote);
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') submitQuote();
+    });
   </script>
 </body>
 </html>
