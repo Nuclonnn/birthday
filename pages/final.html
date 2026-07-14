@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Егору · пароль</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="wrap final-wrap">
+    <span class="tag">финал</span>
+    <h1>Досталось</h1>
+    <p class="congrats">С др)</p>
+    <div class="password" id="password">06041618</div>
+    <p style="color: var(--muted); max-width: 32ch; margin: 0 auto;">
+      Это пароль. Что с ним делать — уже не сайт решит.
+    </p>
+    <button class="btn" id="music-btn" type="button" style="margin-top: 2rem;">
+      Включить узнаваемый кусок
+    </button>
+    <p id="music-note" style="color: var(--muted); font-size: 0.8rem; margin-top: 0.75rem;"></p>
+  </main>
+
+  <audio id="music" src="/music.mp3" preload="auto"></audio>
+
+  <script>
+    const audio = document.getElementById('music');
+    const btn = document.getElementById('music-btn');
+    const note = document.getElementById('music-note');
+    audio.volume = 0.45;
+
+    btn.addEventListener('click', async () => {
+      try {
+        if (audio.paused) {
+          await audio.play();
+          btn.textContent = 'Выключить';
+          note.textContent = 'Аллегрова, укороченная. Извини, если застрянет в голове.';
+        } else {
+          audio.pause();
+          audio.currentTime = 0;
+          btn.textContent = 'Включить узнаваемый кусок';
+          note.textContent = '';
+        }
+      } catch (e) {
+        note.textContent = 'Браузер не дал включить звук. Ткни ещё раз или проверь автоплей.';
+      }
+    });
+  </script>
+</body>
+</html>

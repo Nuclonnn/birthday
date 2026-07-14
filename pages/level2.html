@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Егору · альбом</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="wrap">
+    <span class="tag">уровень 2 / 3</span>
+    <h1>Альбом «как будто вспомнили»</h1>
+    <p class="lead">
+      Фото нет — и правильно. Зато есть замок.
+      Сайт что-то про него записал у тебя в браузере и ждёт, пока ты это поправишь.
+    </p>
+
+    <div class="polaroids" aria-hidden="true">
+      <div class="polaroid" style="--r: -3deg"><div class="shot"></div><div class="cap">???</div></div>
+      <div class="polaroid" style="--r: 2deg"><div class="shot"></div><div class="cap">тоже ???</div></div>
+      <div class="polaroid" style="--r: -1deg"><div class="shot"></div><div class="cap">сюрприз</div></div>
+    </div>
+
+    <section class="panel">
+      <p id="status">Статус замка: <strong>закрыт</strong>. Не оригинал, но работает.</p>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 0;">
+        Браузер что-то сохранил про этот альбом.
+        Загляни в хранилище страницы и переключи замок в выключенное состояние.
+      </p>
+      <button class="btn" id="continue" type="button">Проверить замок</button>
+      <button class="btn btn-ghost" id="refresh-status" type="button">Обновить статус</button>
+      <p class="msg" id="msg" aria-live="polite"></p>
+    </section>
+
+    <div class="hint-box">
+      <details>
+        <summary>совсем застрял?</summary>
+        <p>Подсказка 1: F12 → Application (Приложение) → Local Storage → адрес этого сайта.</p>
+      </details>
+      <details>
+        <summary>и это не помогло</summary>
+        <p>Подсказка 2: поставь значение <code>album_lock</code> в <code>off</code>, потом жми «Проверить замок». Обновлять страницу не обязательно, но можно.</p>
+      </details>
+    </div>
+  </main>
+
+  <script>
+    const KEY = 'album_lock';
+    const statusEl = document.getElementById('status');
+    const msg = document.getElementById('msg');
+    const continueBtn = document.getElementById('continue');
+
+    function ensureLock() {
+      if (localStorage.getItem(KEY) === null) {
+        localStorage.setItem(KEY, 'on');
+      }
+    }
+
+    function renderStatus() {
+      ensureLock();
+      const value = localStorage.getItem(KEY);
+      const open = value === 'off';
+      statusEl.innerHTML = open
+        ? 'Статус замка: <strong style="color: var(--ok)">открыт</strong>. Ну наконец-то.'
+        : 'Статус замка: <strong>закрыт</strong>. Не оригинал, но работает.';
+    }
+
+    async function checkAlbum() {
+      ensureLock();
+      const lock = localStorage.getItem(KEY);
+      msg.className = 'msg';
+      msg.textContent = 'Сверяю с сервером...';
+      continueBtn.disabled = true;
+      try {
+        const res = await fetch('/api/check-album', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lock })
+        });
+        const data = await res.json();
+        if (data.success) {
+          msg.className = 'msg ok';
+          msg.textContent = 'Альбом сдан. Дальше торт — логично.';
+          setTimeout(() => { window.location.href = data.redirectUrl; }, 800);
+        } else {
+          msg.className = 'msg bad';
+          msg.textContent = data.message || 'Ещё закрыто.';
+          continueBtn.disabled = false;
+          renderStatus();
+        }
+      } catch (e) {
+        msg.className = 'msg bad';
+        msg.textContent = 'Сеть упала. Это уже не загадка.';
+        continueBtn.disabled = false;
+      }
+    }
+
+    ensureLock();
+    renderStatus();
+    document.getElementById('refresh-status').addEventListener('click', renderStatus);
+    continueBtn.addEventListener('click', checkAlbum);
+  </script>
+</body>
+</html>

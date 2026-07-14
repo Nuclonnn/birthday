@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Егору · торт</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="wrap">
+    <span class="tag">уровень 3 / 3</span>
+    <h1>Торт. Свечи. Почти финал.</h1>
+    <p class="lead">
+      Кнопок тут больше нет — правильный ход делается в консоли.
+      Загадай желание правильно, и свечи сдадутся.
+    </p>
+
+    <pre class="cake" aria-hidden="true">
+       i  i  i
+      |  |  |
+   ===============
+   |  ~ birthday ~ |
+   |~~~~~~~~~~~~~~~|
+   \_______________/
+    </pre>
+
+    <section class="panel">
+      <p>
+        На странице есть функция <code>makeAWish(...)</code>.
+        Вызови её из консоли с нужным словом.
+      </p>
+      <p style="color: var(--muted); font-size: 0.9rem;">
+        Слово не написано прямо. Зато вот «поздравление».
+        Читай внимательно — особенно начала строк.
+      </p>
+      <ul class="acrostic">
+        <li>Ты ждал трогательную речь?</li>
+        <li>Отбой. Не будет.</li>
+        <li>Радуйся, что вообще дошёл.</li>
+        <li>Торту виднее, чем всем нам.</li>
+      </ul>
+      <p class="msg" id="msg" aria-live="polite">Консоль ждёт. Не торопи её.</p>
+    </section>
+
+    <div class="hint-box">
+      <details>
+        <summary>совсем застрял?</summary>
+        <p>Подсказка 1: F12 → Console / Консоль. Напиши имя функции и скобки.</p>
+      </details>
+      <details>
+        <summary>и это не помогло</summary>
+        <p>Подсказка 2: первые буквы четырёх строк ниже складываются в слово. Его и передай в кавычках, например: <code>makeAWish("....")</code>.</p>
+      </details>
+    </div>
+  </main>
+
+  <script>
+    const msg = document.getElementById('msg');
+
+    window.makeAWish = async function makeAWish(wish) {
+      if (typeof wish !== 'string' || !wish.trim()) {
+        msg.className = 'msg bad';
+        msg.textContent = 'Желание должно быть строкой. Не числом и не молчанием.';
+        console.warn('Пример: makeAWish("что-то")');
+        return { success: false };
+      }
+
+      msg.className = 'msg';
+      msg.textContent = 'Задуваю...';
+
+      try {
+        const res = await fetch('/api/check-wish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wish })
+        });
+        const data = await res.json();
+        if (data.success) {
+          msg.className = 'msg ok';
+          msg.textContent = 'Ок. Свечи тухнут. Пароль рядом.';
+          console.log('%cСработало. Перехожу...', 'color: #7cb87c');
+          setTimeout(() => { window.location.href = data.redirectUrl; }, 900);
+          return data;
+        }
+        msg.className = 'msg bad';
+        msg.textContent = data.message || 'Не то желание.';
+        console.warn(data.message || 'Не то желание.');
+        return data;
+      } catch (e) {
+        msg.className = 'msg bad';
+        msg.textContent = 'Сервер не ответил. Это баг, не загадка.';
+        return { success: false };
+      }
+    };
+
+    console.log(
+      '%cmakeAWish(word)%c — да, серьёзно. Слово ищи на странице.',
+      'color:#f0a202;font-weight:bold',
+      'color:#8a7360'
+    );
+  </script>
+</body>
+</html>
