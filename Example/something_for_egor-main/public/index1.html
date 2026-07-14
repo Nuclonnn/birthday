@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Corp. Login Panel</title>
+    <style>
+        body { background: #1a1a1a; color: #0f0; font-family: monospace; text-align: center; padding-top: 50px; }
+        button { background: #0f0; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 16px;}
+        button:hover { background: #fff; }
+        .console { border: 1px solid #333; background: #000; padding: 20px; width: 80%; max-width: 600px; margin: 20px auto; text-align: left; min-height: 200px; overflow-y: auto;}
+        .red { color: #ff3333; }
+        .green { color: #0f0; }
+        .gray { color: #666; }
+    </style>
+</head>
+<body>
+    <h1>САЙТ САНТЫ БЫЛ ЗАШИФРОВАН by Anonymous</h1>
+    <p>Авторизуйтесь, чтобы получить данные о Тайном Санте.</p>
+    
+    <button onclick="login()">1. ВОЙТИ В СИСТЕМУ</button>
+    <button onclick="getData()">2. ПОЛУЧИТЬ ДАННЫЕ</button>
+
+    <div class="console" id="output">
+        <span class="gray">> System ready...</span><br>
+    </div>
+
+    <script>
+        const log = (text, color='white') => {
+            const el = document.getElementById('output');
+            el.innerHTML += `<span style="color:${color}">> ${text}</span><br>`;
+            el.scrollTop = el.scrollHeight;
+        };
+
+        async function login() {
+            log("Инициализация входа...", "yellow");
+            try {
+                const res = await fetch('/api/login', { method: 'POST' });
+                const data = await res.json();
+                if(data.success) {
+                    log("Успешный вход. Права доступа: GUEST.", "gray");
+                    log("Теперь попробуйте получить данные (кнопка 2).", "white");
+                }
+            } catch (e) {
+                log("Ошибка сети", "red");
+            }
+        }
+
+        async function getData() {
+            log("Запрос к /api/secret-santa-data...", "yellow");
+            try {
+                const res = await fetch('/api/secret-santa-data');
+                
+                if (res.status === 403) {
+                    const data = await res.json();
+                    log(`[ОШИБКА 403] ${data.error}`, "red");
+                    log(`ПОДСКАЗКА: ${data.hint}`, "gray");
+                } else if (res.status === 200) {
+                    const data = await res.json();
+                    log("ДОСТУП РАЗРЕШЕН! Права ADMIN подтверждены.", "#0f0");
+                    log(data.message, "#0f0");
+                    log("Перенаправление...", "yellow");
+                    
+                    // Переход на следующий уровень через 2 секунды
+                    setTimeout(() => {
+                        window.location.href = data.redirectUrl;
+                    }, 5000);
+                }
+            } catch (e) {
+                log("Ошибка сервера", "red");
+            }
+        }
+    </script>
+    <a href="https://t.me/suprt_NY_egor_bot" target="_blank" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    color: #0f0;
+    text-decoration: none;
+    font-family: monospace;
+    border: 1px solid #0f0;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    font-size: 12px;
+    z-index: 1000;
+">
+    [!] СВЯЗЬ С СИС.АДМИНОМ
+</a>
+</body>
+</html>

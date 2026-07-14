@@ -4,52 +4,201 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Егору · торт</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      color: #f7efe4;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(255, 170, 60, 0.16), transparent 45%),
+        #140f0c;
+      min-height: 100vh;
+    }
+
+    .page {
+      width: min(560px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 3rem 0 4rem;
+      text-align: center;
+    }
+
+    .lvl {
+      color: #f0a202;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      margin: 0 0 0.6rem;
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
+    }
+
+    .lead {
+      margin: 0 auto 1.25rem;
+      max-width: 36ch;
+      color: rgba(247, 239, 228, 0.75);
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .stage {
+      display: inline-block;
+      padding: 1.25rem 1.5rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(240, 162, 2, 0.25);
+      animation: rise 0.7s ease both;
+    }
+
+    .candles {
+      display: flex;
+      justify-content: center;
+      gap: 1.1rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .candle {
+      width: 10px;
+      height: 36px;
+      background: linear-gradient(#f7efe4, #d9c3a0);
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .candle::before {
+      content: "";
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      width: 10px;
+      height: 14px;
+      transform: translateX(-50%);
+      background: #ffb347;
+      border-radius: 50% 50% 40% 40%;
+      box-shadow: 0 0 10px #ff9f1c;
+      animation: flicker 0.35s infinite alternate;
+    }
+
+    .candle:nth-child(2)::before { animation-delay: 0.1s; }
+    .candle:nth-child(3)::before { animation-delay: 0.2s; }
+
+    .cake-body {
+      width: min(280px, 70vw);
+      margin: 0 auto;
+    }
+
+    .layer {
+      height: 34px;
+      margin: 0 auto;
+      border-radius: 6px;
+    }
+
+    .layer.top {
+      width: 70%;
+      background: #f2b8c6;
+      border: 2px solid #e89aac;
+    }
+
+    .layer.mid {
+      width: 85%;
+      margin-top: 4px;
+      background: #f0d5a8;
+      border: 2px solid #e0bf86;
+    }
+
+    .layer.base {
+      width: 100%;
+      margin-top: 4px;
+      height: 42px;
+      background: #c9886a;
+      border: 2px solid #b06f52;
+    }
+
+    .ribbon {
+      margin-top: 0.9rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.35rem;
+      letter-spacing: 0.35em;
+      color: #f0a202;
+      font-weight: 600;
+    }
+
+    .note {
+      margin: 1.25rem auto 0;
+      max-width: 40ch;
+      color: rgba(247, 239, 228, 0.7);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .msg {
+      min-height: 1.3em;
+      margin: 1rem 0 0;
+      font-size: 0.9rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .msg.bad { color: #ff8f7a; }
+    .msg.ok { color: #9ed9a0; }
+
+    .hints {
+      margin-top: 1.75rem;
+      text-align: left;
+      border-top: 1px dashed rgba(240, 162, 2, 0.25);
+      padding-top: 0.9rem;
+      font-size: 0.85rem;
+      color: rgba(247, 239, 228, 0.55);
+    }
+
+    .hints details { margin-top: 0.45rem; }
+    .hints summary { cursor: pointer; color: rgba(247, 239, 228, 0.7); }
+    .hints p { margin: 0.4rem 0 0; line-height: 1.45; }
+
+    @keyframes flicker {
+      from { transform: translateX(-50%) scale(1); opacity: 0.85; }
+      to { transform: translateX(-50%) scale(1.15) translateY(-1px); opacity: 1; }
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-  <main class="wrap">
-    <span class="tag">уровень 3 / 3</span>
-    <h1>Торт. Свечи. Почти финал.</h1>
-    <p class="lead">
-      Кнопок тут больше нет — правильный ход делается в консоли.
-      Загадай желание правильно, и свечи сдадутся.
-    </p>
+  <main class="page">
+    <div class="lvl">Уровень 3 / 3</div>
+    <h1>Торт</h1>
+    <p class="lead">Кнопок больше нет. На ленте шифр. Свечи тоже не просто так стоят.</p>
 
-    <pre class="cake" aria-hidden="true">
-       i  i  i
-      |  |  |
-   ===============
-   |  ~ birthday ~ |
-   |~~~~~~~~~~~~~~~|
-   \_______________/
-    </pre>
+    <div class="stage">
+      <div class="candles" aria-hidden="true">
+        <div class="candle"></div>
+        <div class="candle"></div>
+        <div class="candle"></div>
+      </div>
+      <div class="cake-body" aria-hidden="true">
+        <div class="layer top"></div>
+        <div class="layer mid"></div>
+        <div class="layer base"></div>
+      </div>
+      <div class="ribbon" id="ribbon">WRUW</div>
+    </div>
 
-    <section class="panel">
-      <p>
-        На странице есть функция <code>makeAWish(...)</code>.
-        Вызови её из консоли с нужным словом.
-      </p>
-      <p style="color: var(--muted); font-size: 0.9rem;">
-        Слово не написано прямо. Зато вот «поздравление».
-        Читай внимательно — особенно начала строк.
-      </p>
-      <ul class="acrostic">
-        <li>Ты ждал трогательную речь?</li>
-        <li>Отбой. Не будет.</li>
-        <li>Радуйся, что вообще дошёл.</li>
-        <li>Торту виднее, чем всем нам.</li>
-      </ul>
-      <p class="msg" id="msg" aria-live="polite">Консоль ждёт. Не торопи её.</p>
-    </section>
+    <p class="note">Разгадай слово на ленте и передай его странице правильным способом.</p>
+    <p class="msg" id="msg" aria-live="polite"></p>
 
-    <div class="hint-box">
+    <div class="hints">
       <details>
-        <summary>совсем застрял?</summary>
-        <p>Подсказка 1: F12 → Console / Консоль. Напиши имя функции и скобки.</p>
+        <summary>Подсказка 1</summary>
+        <p>Открой консоль браузера — там написано, какую функцию вызвать.</p>
       </details>
       <details>
-        <summary>и это не помогло</summary>
-        <p>Подсказка 2: первые буквы четырёх строк ниже складываются в слово. Его и передай в кавычках, например: <code>makeAWish("....")</code>.</p>
+        <summary>Подсказка 2</summary>
+        <p>На ленте шифр Цезаря. Сдвиг равен числу свечей (3). Полученное слово передай в эту функцию в кавычках.</p>
       </details>
     </div>
   </main>
@@ -60,13 +209,12 @@
     window.makeAWish = async function makeAWish(wish) {
       if (typeof wish !== 'string' || !wish.trim()) {
         msg.className = 'msg bad';
-        msg.textContent = 'Желание должно быть строкой. Не числом и не молчанием.';
-        console.warn('Пример: makeAWish("что-то")');
+        msg.textContent = 'Нужна строка, например makeAWish("word")';
         return { success: false };
       }
 
       msg.className = 'msg';
-      msg.textContent = 'Задуваю...';
+      msg.textContent = 'Проверяю...';
 
       try {
         const res = await fetch('/api/check-wish', {
@@ -77,26 +225,24 @@
         const data = await res.json();
         if (data.success) {
           msg.className = 'msg ok';
-          msg.textContent = 'Ок. Свечи тухнут. Пароль рядом.';
-          console.log('%cСработало. Перехожу...', 'color: #7cb87c');
-          setTimeout(() => { window.location.href = data.redirectUrl; }, 900);
+          msg.textContent = 'Сработало.';
+          setTimeout(() => { window.location.href = data.redirectUrl; }, 700);
           return data;
         }
         msg.className = 'msg bad';
-        msg.textContent = data.message || 'Не то желание.';
-        console.warn(data.message || 'Не то желание.');
+        msg.textContent = data.message || 'Неверно.';
         return data;
       } catch (e) {
         msg.className = 'msg bad';
-        msg.textContent = 'Сервер не ответил. Это баг, не загадка.';
+        msg.textContent = 'Ошибка сети.';
         return { success: false };
       }
     };
 
     console.log(
-      '%cmakeAWish(word)%c — да, серьёзно. Слово ищи на странице.',
-      'color:#f0a202;font-weight:bold',
-      'color:#8a7360'
+      '%cmakeAWish("...")%c — сюда слово с ленты после расшифровки',
+      'color:#f0a202;font-weight:700',
+      'color:#9a8b78'
     );
   </script>
 </body>

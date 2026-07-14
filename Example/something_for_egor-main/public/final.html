@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>С Новым Годом!</title>
+    <style>
+        body { 
+            background-color: #050505; 
+            color: #ccc; 
+            font-family: 'Courier New', monospace; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            text-align: center;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        #start-btn {
+            background: #d42426;
+            color: white;
+            border: 2px solid #fff;
+            padding: 20px 40px;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-family: inherit;
+            box-shadow: 0 0 20px #d42426;
+            animation: pulse-btn 1.5s infinite;
+            z-index: 100;
+        }
+
+        #content { display: none; }
+
+        /* Анимации */
+        @keyframes pulse-btn { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes sway { 0% { transform: rotate(-2deg); } 100% { transform: rotate(2deg); } }
+        
+        /* Цвета гирлянд */
+        @keyframes blink-red { 0%, 100% { color: #550000; text-shadow: none; } 50% { color: #ff0000; text-shadow: 0 0 8px red; } }
+        @keyframes blink-gold { 0%, 100% { color: #554400; text-shadow: none; } 50% { color: #ffd700; text-shadow: 0 0 8px gold; } }
+        @keyframes blink-blue { 0%, 100% { color: #000055; text-shadow: none; } 50% { color: #00ffff; text-shadow: 0 0 8px cyan; } }
+
+        /* Огонь */
+        @keyframes fire-color { 
+            0% { color: #ff4500; text-shadow: 0 0 4px #ff4500; } 
+            50% { color: #ff8c00; text-shadow: 0 0 10px #ff8c00; }
+            100% { color: #ff0000; text-shadow: 0 0 4px #ff0000; } 
+        }
+
+        @keyframes snow-fall { 0% { transform: translateY(-100vh); } 100% { transform: translateY(100vh); } }
+
+        /* Основные стили для арта */
+        pre { 
+            font-weight: bold; 
+            font-size: 14px; 
+            line-height: 14px; /* ВАЖНО: фиксированная высота строки, чтобы не плыло */
+            position: relative; 
+            letter-spacing: 0px; /* ВАЖНО: чтобы символы стояли плотно */
+        }
+        
+        .tree-wrapper {
+            display: inline-block;
+            transform-origin: bottom center;
+            animation: sway 3s infinite ease-in-out alternate;
+        }
+        
+        .tree-green { color: #2ecc71; text-shadow: 0 0 2px #006400; }
+        .star { color: #f1c40f; animation: blink-gold 0.5s infinite alternate; font-size: 18px; }
+        
+        .light-r { animation: blink-red 1s infinite; }
+        .light-g { animation: blink-gold 1.2s infinite; }
+        .light-b { animation: blink-blue 0.8s infinite; }
+
+        .gift { color: #e91e63; }
+        .gift-bow { color: #fff; text-shadow: 0 0 5px #fff; }
+
+        .log { color: #795548; }
+        .fire-anim { animation: fire-color 0.2s infinite alternate; font-weight: 900; }
+
+        h1 { font-size: 2.5rem; margin: 20px 0; color: #fff; text-shadow: 0 0 10px #fff; }
+        .name { color: #f1c40f; text-transform: uppercase; letter-spacing: 3px; }
+
+        .snowflake { position: absolute; color: #fff; opacity: 0.8; top: -20px; z-index: -1; }
+    </style>
+</head>
+<body>
+
+    <button id="start-btn" onclick="startParty()">🎁 РАСПАКОВАТЬ 🎁</button>
+
+    <div id="content">
+        
+        <div class="tree-wrapper">
+<pre class="tree-green">
+       <span class="star">★</span>
+      / \
+     /   \
+    /  <span class="light-r">o</span>  \
+   /       \
+  /   <span class="light-b">o</span>     \
+ /           \
+/__<span class="light-g">o</span>_______<span class="light-r">o</span>__\
+ | | 
+🎁| |🎁
+</pre>
+        </div>
+
+        <h1>С НОВЫМ ГОДОМ!<br><span class="name">ТВОЙ ТАЙНЫЙ САНТА ВАНЯ</span></h1>
+        
+        <!-- Камин стал шире и стабильнее -->
+<pre id="fireplace">
+ _________________________
+|  _____________________  |
+| |                     | |
+| | <span id="fire-top" class="fire-anim"> .  '  .  '  .  . </span>| |
+| | <span id="fire-btm" class="fire-anim"> (  )  (  )  (  ) </span>| |
+| |_____________________| |
+|_________________________|
+</pre>
+        
+        <p style="margin-top: 30px; font-size: 12px; color: #444;">(Sound: Jingle Bells)</p>
+    </div>
+
+    <!-- ТУТ ПРОВЕРЬ НАЗВАНИЕ ФАЙЛА (mp3 или m4a) -->
+    <audio id="music" loop>
+        <source src="/music.m4a" type="audio/mp4">
+    </audio>
+
+    <script>
+        function startParty() {
+            document.getElementById('start-btn').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            
+            const audio = document.getElementById('music');
+            audio.volume = 0.3;
+            audio.play().catch(console.error);
+
+            createSnow();
+            animateFire();
+        }
+
+        function animateFire() {
+            const topRow = document.getElementById('fire-top');
+            const btmRow = document.getElementById('fire-btm');
+            
+            // Кадры для верхней части пламени (язычки)
+            const framesTop = [
+                "  .  '  .  ,  .  '  ",
+                " '  .  ,  .  '  .   ",
+                "  ,  .  '  .  ,  '  "
+            ];
+
+            // Кадры для нижней части пламени (основание)
+            const framesBtm = [
+                " (  (  )  (  )  )   ",
+                " )  )  (  )  (  (   ",
+                " (  (  (  )  )  )   "
+            ];
+            
+            let i = 0;
+            setInterval(() => {
+                topRow.innerText = framesTop[i];
+                btmRow.innerText = framesBtm[i];
+                i = (i + 1) % framesTop.length;
+            }, 150);
+        }
+
+        function createSnow() {
+            const symbols = ['❄', '•', '❅', '.'];
+            setInterval(() => {
+                const flake = document.createElement('div');
+                flake.classList.add('snowflake');
+                flake.style.left = Math.random() * 100 + 'vw';
+                flake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                flake.style.animation = `snow-fall ${Math.random() * 3 + 3}s linear infinite`;
+                flake.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                document.body.appendChild(flake);
+                setTimeout(() => { flake.remove(); }, 6000);
+            }, 100);
+        }
+    </script>
+</body>
+</html>

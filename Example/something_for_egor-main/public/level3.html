@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Security Checkpoint</title>
+    <style>
+        body { background: #000; color: #33ff00; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .terminal { border: 2px solid #33ff00; padding: 40px; width: 600px; max-width: 90%; background: rgba(0, 20, 0, 0.9); box-shadow: 0 0 20px #33ff00; position: relative; }
+        input { background: transparent; border: none; border-bottom: 2px solid #33ff00; color: white; font-size: 1.2rem; font-family: inherit; width: 80%; outline: none; margin-top: 20px; text-transform: uppercase; }
+        button { background: #33ff00; color: black; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; margin-top: 20px; font-family: inherit; font-size: 1rem; }
+        button:hover { background: #fff; }
+        .encoded { color: #f1c40f; font-weight: bold; font-size: 1.2rem; margin: 10px 0; display: block; word-break: break-all; }
+        .error { color: red; display: none; margin-top: 10px; }
+        .hint { margin-top: 30px; font-size: 0.9rem; color: #555; z-index: 10; background: black; padding: 5px;}
+        .hint:hover { color: #00FF41; cursor: help; }
+        h1 { margin-top: 0; font-size: 24px; text-transform: uppercase; border-bottom: 1px dashed #33ff00; padding-bottom: 10px; }
+        
+        /* Анимация загрузки */
+        #loader { display: none; margin-top: 20px; width: 100%; background: #111; height: 20px; border: 1px solid #33ff00; }
+        #bar { height: 100%; background: #33ff00; width: 0%; transition: width 2s linear; }
+    </style>
+</head>
+<body>
+
+    <div class="terminal">
+        <h1>System Security Layer 3</h1>
+        <p>ВНИМАНИЕ! Доступ к праздничному сектору заблокирован.</p>
+        <p>Для снятия блокировки расшифруйте код протокола и введите полученную команду.</p>
+        
+        <hr style="border-color: #33ff00; opacity: 0.3;">
+        
+        <p>ШИФРОВАННЫЙ КЛЮЧ:</p>
+       
+        <span class="encoded">VldMVS1BT0wtTkhBTFo=</span>
+        
+        <br><br>
+        <span>> ВВЕДИТЕ КОМАНДУ:</span><br>
+        <input type="text" id="pass-input" placeholder="Введите расшифрованный текст..." autocomplete="off">
+        <br>
+        <button onclick="checkPassword()">EXECUTE</button>
+        
+        <p id="error-msg" class="error">ОШИБКА: НЕВЕРНАЯ КОМАНДА. ДОСТУП ЗАПРЕЩЕН.</p>
+
+        <div id="loader"><div id="bar"></div></div>
+    </div>
+    <div class="hint">
+            ПОДСКАЗКА: Изучи получаемые ответы на предыдущих страницах NETWORK
+    </div>
+    <a href="https://t.me/suprt_NY_egor_bot" style="position:fixed; bottom:10px; right:10px; color:#33ff00; text-decoration:none; font-size:10px;">help</a>
+
+    <script>
+        async function checkPassword() {
+            const input = document.getElementById('pass-input').value.trim();
+           
+            const cleanInput = input.replace(/\s/g, '-').toUpperCase(); 
+
+            const res = await fetch('/api/check-base64', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: cleanInput })
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                document.getElementById('error-msg').style.display = 'none';
+                document.getElementById('loader').style.display = 'block';
+                
+                setTimeout(() => { document.getElementById('bar').style.width = '100%'; }, 100);
+                
+                setTimeout(() => {
+                    window.location.href = data.redirectUrl;
+                }, 2200);
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+                document.querySelector('.terminal').style.transform = 'translateX(10px)';
+                setTimeout(() => document.querySelector('.terminal').style.transform = 'translateX(0)', 100);
+            }
+        }
+    </script>
+</body>
+</html>

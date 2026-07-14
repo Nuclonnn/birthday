@@ -3,46 +3,165 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Егору · пароль</title>
+  <title>Егору</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      font-family: 'Manrope', sans-serif;
+      color: #fff6ea;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(255, 120, 80, 0.22), transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(240, 162, 2, 0.15), transparent 35%),
+        #1a120e;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .gate, .party {
+      width: min(520px, calc(100% - 2rem));
+      text-align: center;
+    }
+
+    .gift-btn {
+      border: none;
+      background: #e25a3c;
+      color: #fff8f0;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      padding: 1.1rem 1.8rem;
+      cursor: pointer;
+      box-shadow: 0 0 0 0 rgba(226, 90, 60, 0.5);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+
+    .gift-btn:hover { filter: brightness(1.06); }
+
+    .party { display: none; }
+    .party.show { display: block; animation: pop 0.55s ease both; }
+
+    .cake {
+      display: inline-block;
+      margin-bottom: 1rem;
+      animation: sway 3s ease-in-out infinite alternate;
+    }
+
+    .candles {
+      display: flex;
+      justify-content: center;
+      gap: 0.9rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .candle {
+      width: 8px;
+      height: 28px;
+      background: #f7efe4;
+      position: relative;
+      border-radius: 2px;
+    }
+
+    .candle::before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      width: 9px;
+      height: 12px;
+      transform: translateX(-50%);
+      background: #ffb347;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #ff9f1c;
+      animation: flicker 0.3s infinite alternate;
+    }
+
+    .layers .l {
+      margin: 0 auto;
+      border-radius: 8px;
+    }
+
+    .l1 { width: 120px; height: 28px; background: #f2b8c6; }
+    .l2 { width: 160px; height: 32px; margin-top: 4px; background: #f0d5a8; }
+    .l3 { width: 200px; height: 38px; margin-top: 4px; background: #c9886a; }
+
+    .congrats {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 8vw, 3rem);
+      font-weight: 800;
+      margin: 0.4rem 0 0.2rem;
+    }
+
+    .password {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.6rem, 10vw, 4.2rem);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #f0a202;
+      margin: 0.6rem 0 0;
+      text-shadow: 0 0 28px rgba(240, 162, 2, 0.35);
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(226, 90, 60, 0.45); transform: scale(1); }
+      50% { box-shadow: 0 0 0 14px rgba(226, 90, 60, 0); transform: scale(1.03); }
+    }
+
+    @keyframes pop {
+      from { opacity: 0; transform: scale(0.94) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes sway {
+      from { transform: rotate(-2deg); }
+      to { transform: rotate(2deg); }
+    }
+
+    @keyframes flicker {
+      from { transform: translateX(-50%) scale(1); }
+      to { transform: translateX(-50%) scale(1.2) translateY(-1px); }
+    }
+  </style>
 </head>
 <body>
-  <main class="wrap final-wrap">
-    <span class="tag">финал</span>
-    <h1>Досталось</h1>
+  <div class="gate" id="gate">
+    <button class="gift-btn" id="open" type="button">Получить подарок</button>
+  </div>
+
+  <div class="party" id="party">
+    <div class="cake" aria-hidden="true">
+      <div class="candles">
+        <div class="candle"></div>
+        <div class="candle"></div>
+        <div class="candle"></div>
+      </div>
+      <div class="layers">
+        <div class="l l1"></div>
+        <div class="l l2"></div>
+        <div class="l l3"></div>
+      </div>
+    </div>
     <p class="congrats">С др)</p>
-    <div class="password" id="password">06041618</div>
-    <p style="color: var(--muted); max-width: 32ch; margin: 0 auto;">
-      Это пароль. Что с ним делать — уже не сайт решит.
-    </p>
-    <button class="btn" id="music-btn" type="button" style="margin-top: 2rem;">
-      Включить узнаваемый кусок
-    </button>
-    <p id="music-note" style="color: var(--muted); font-size: 0.8rem; margin-top: 0.75rem;"></p>
-  </main>
+    <div class="password">06041618</div>
+  </div>
 
   <audio id="music" src="/music.mp3" preload="auto"></audio>
 
   <script>
     const audio = document.getElementById('music');
-    const btn = document.getElementById('music-btn');
-    const note = document.getElementById('music-note');
     audio.volume = 0.45;
 
-    btn.addEventListener('click', async () => {
+    document.getElementById('open').addEventListener('click', async () => {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('party').classList.add('show');
       try {
-        if (audio.paused) {
-          await audio.play();
-          btn.textContent = 'Выключить';
-          note.textContent = 'Аллегрова, укороченная. Извини, если застрянет в голове.';
-        } else {
-          audio.pause();
-          audio.currentTime = 0;
-          btn.textContent = 'Включить узнаваемый кусок';
-          note.textContent = '';
-        }
+        await audio.play();
       } catch (e) {
-        note.textContent = 'Браузер не дал включить звук. Ткни ещё раз или проверь автоплей.';
+        // автоплей могли запретить — пароль всё равно виден
       }
     });
   </script>

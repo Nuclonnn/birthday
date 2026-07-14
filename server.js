@@ -4,8 +4,8 @@ const path = require('path');
 
 const app = express();
 
-const ENVELOPE_CODE = 'PRAVDA-ZDES';
-const ALBUM_UNLOCK = 'off';
+const ENVELOPE_CODE = 'PODAROK-VNUTRI';
+const LOCK_UNLOCK = 'off';
 const WISH_WORD = 'tort';
 
 const COOKIE_OPTS = { maxAge: 1000 * 60 * 60 * 6, httpOnly: false, sameSite: 'lax' };
@@ -27,35 +27,43 @@ app.get('/', (req, res) => {
   res.sendFile(pages('index.html'));
 });
 
+app.get('/api/seal-info', (req, res) => {
+  res.json({
+    seal_format: 'base64',
+    note: 'decode before submit'
+  });
+});
+
 app.post('/api/check-envelope', (req, res) => {
   const raw = String(req.body.code || '').trim().toUpperCase().replace(/\s+/g, '-');
   if (raw === ENVELOPE_CODE) {
     setStage(res, 2);
-    return res.json({ success: true, redirectUrl: '/album' });
+    return res.json({ success: true, redirectUrl: '/locker' });
   }
   return res.json({
     success: false,
-    message: 'Мимо. Конверт так просто не сдаётся.'
+    message: 'Неверный код.',
+    seal_format: 'base64'
   });
 });
 
-app.get('/album', (req, res) => {
+app.get('/locker', (req, res) => {
   if (stage(req) < 2) return res.redirect('/');
   res.sendFile(pages('level2.html'));
 });
 
-app.post('/api/check-album', (req, res) => {
+app.post('/api/check-lock', (req, res) => {
   if (stage(req) < 2) {
-    return res.status(403).json({ success: false, message: 'Сначала разберись с конвертом.' });
+    return res.status(403).json({ success: false, message: 'Сначала открой конверт.' });
   }
   const lock = String(req.body.lock || '').trim().toLowerCase();
-  if (lock === ALBUM_UNLOCK) {
+  if (lock === LOCK_UNLOCK) {
     setStage(res, 3);
     return res.json({ success: true, redirectUrl: '/cake' });
   }
   return res.json({
     success: false,
-    message: 'Альбом всё ещё на замке. Покопайся глубже.'
+    message: 'Замок всё ещё закрыт.'
   });
 });
 
@@ -66,7 +74,7 @@ app.get('/cake', (req, res) => {
 
 app.post('/api/check-wish', (req, res) => {
   if (stage(req) < 3) {
-    return res.status(403).json({ success: false, message: 'Рановато загадывать.' });
+    return res.status(403).json({ success: false, message: 'Сначала разберись с замком.' });
   }
   const wish = String(req.body.wish || '').trim().toLowerCase();
   if (wish === WISH_WORD) {
@@ -75,7 +83,7 @@ app.post('/api/check-wish', (req, res) => {
   }
   return res.json({
     success: false,
-    message: 'Свечи даже не дрогнули. Попробуй другое желание.'
+    message: 'Не то слово. Свечи на месте.'
   });
 });
 

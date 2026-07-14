@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Channel</title>
+    <style>
+        body { background: black; color: #00FF41; font-family: 'Courier New', Courier, monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        .box { border: 1px dashed #00FF41; padding: 40px; text-align: center; max-width: 600px; background: rgba(0, 20, 0, 0.9); z-index: 10; position: relative; }
+        .blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+        p { font-size: 1.2rem; line-height: 1.5; }
+        .hint { margin-top: 30px; font-size: 0.9rem; color: #555; z-index: 10; background: black; padding: 5px;}
+        .hint:hover { color: #00FF41; cursor: help; }
+        h1 { margin-top: 0; }
+    </style>
+</head>
+<body>
+    
+    <div class="box">
+        <h1>СВЯЗЬ УСТАНОВЛЕНА</h1>
+        <p>[SECURE CONNECTION ESTABLISHED]</p>
+        <hr style="border-color: #00FF41">
+        <p>Сообщение от Санты было получено сервером.</p>
+        <p style="color: red;">[ERROR] HTML BODY RENDER FAILED</p>
+        <p>Тело ответа пусто. Данные переданы в <b>заголовках ответа</b> (Response Headers).</p>
+        <br>
+        <span class="blink">_waiting_for_network_inspection_</span>
+    </div>
+
+    <div class="hint">
+        ПОДСКАЗКА: Изучи получаемые заголовки в Network
+    </div>
+
+    <!-- Эффект матрицы -->
+    <canvas id="matrix" style="position: absolute; top: 0; left: 0; z-index: 1;"></canvas>
+
+    <script>
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const fontSize = 14;
+        const columns = canvas.width/fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+            for(let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+                if(drops[i]*fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(draw, 33);
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+    </script>
+<a href="https://t.me/suprt_NY_egor_bot" target="_blank" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    color: #0f0;
+    text-decoration: none;
+    font-family: monospace;
+    border: 1px solid #0f0;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    font-size: 12px;
+    z-index: 1000;
+">
+    [!] СВЯЗЬ С СИС.АДМИНОМ
+</a>
+</body>
+</html>

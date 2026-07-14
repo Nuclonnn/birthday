@@ -3,102 +3,234 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Егору · альбом</title>
+  <title>Егору · замок</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Archivo+Black&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      color: #d7e0ea;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 3px),
+        linear-gradient(180deg, #12161c 0%, #1b232e 100%);
+      min-height: 100vh;
+    }
+
+    .page {
+      width: min(560px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 3rem 0 4rem;
+    }
+
+    .lvl {
+      color: #6fa8ff;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(1.7rem, 5vw, 2.3rem);
+      margin: 0 0 0.75rem;
+      letter-spacing: 0.02em;
+    }
+
+    .lead {
+      margin: 0 0 1.5rem;
+      line-height: 1.5;
+      color: #9aa8b8;
+      max-width: 40ch;
+    }
+
+    .locker {
+      border: 2px solid #3a4656;
+      background: linear-gradient(160deg, #2a3340, #1a2029);
+      padding: 1.5rem;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), 0 12px 30px rgba(0,0,0,0.35);
+      animation: boot 0.55s ease both;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .door {
+      flex: 1;
+      height: 120px;
+      border: 1px solid #4a5768;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.04), transparent 30%),
+        #242c38;
+      position: relative;
+    }
+
+    .door::after {
+      content: "";
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #111;
+      transform: translateY(-50%);
+      box-shadow: inset 0 0 0 2px #666;
+    }
+
+    .lamp {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ff5a4a;
+      box-shadow: 0 0 12px #ff5a4a;
+      animation: blink-red 1.4s step-end infinite;
+    }
+
+    .lamp.open {
+      background: #3dff8a;
+      box-shadow: 0 0 14px #3dff8a;
+      animation: none;
+    }
+
+    .status {
+      font-size: 0.95rem;
+      margin: 0 0 1rem;
+    }
+
+    .btn {
+      border: 1px solid #6fa8ff;
+      background: #6fa8ff;
+      color: #0b1220;
+      font-weight: 600;
+      padding: 0.75rem 1.1rem;
+      cursor: pointer;
+    }
+
+    .btn:hover { filter: brightness(1.06); }
+    .btn:disabled { opacity: 0.5; cursor: wait; }
+
+    .btn-ghost {
+      margin-left: 0.5rem;
+      background: transparent;
+      color: #d7e0ea;
+    }
+
+    .msg { min-height: 1.3em; margin: 0.8rem 0 0; font-size: 0.9rem; }
+    .msg.bad { color: #ff8b7c; }
+    .msg.ok { color: #7dffb0; }
+
+    .hints {
+      margin-top: 1.75rem;
+      border-top: 1px dashed #334053;
+      padding-top: 0.9rem;
+      font-size: 0.85rem;
+      color: #7f8c9c;
+    }
+
+    .hints details { margin-top: 0.45rem; }
+    .hints summary { cursor: pointer; color: #9aa8b8; }
+    .hints p { margin: 0.4rem 0 0; line-height: 1.45; }
+
+    @keyframes boot {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes blink-red {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+  </style>
 </head>
 <body>
-  <main class="wrap">
-    <span class="tag">уровень 2 / 3</span>
-    <h1>Альбом «как будто вспомнили»</h1>
-    <p class="lead">
-      Фото нет — и правильно. Зато есть замок.
-      Сайт что-то про него записал у тебя в браузере и ждёт, пока ты это поправишь.
-    </p>
+  <main class="page">
+    <div class="lvl">Уровень 2 / 3</div>
+    <h1>Ячейка с замком</h1>
+    <p class="lead">Сервер замок не держит — его состояние лежит у тебя в браузере. Переключи и проверь.</p>
 
-    <div class="polaroids" aria-hidden="true">
-      <div class="polaroid" style="--r: -3deg"><div class="shot"></div><div class="cap">???</div></div>
-      <div class="polaroid" style="--r: 2deg"><div class="shot"></div><div class="cap">тоже ???</div></div>
-      <div class="polaroid" style="--r: -1deg"><div class="shot"></div><div class="cap">сюрприз</div></div>
-    </div>
-
-    <section class="panel">
-      <p id="status">Статус замка: <strong>закрыт</strong>. Не оригинал, но работает.</p>
-      <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 0;">
-        Браузер что-то сохранил про этот альбом.
-        Загляни в хранилище страницы и переключи замок в выключенное состояние.
-      </p>
-      <button class="btn" id="continue" type="button">Проверить замок</button>
-      <button class="btn btn-ghost" id="refresh-status" type="button">Обновить статус</button>
+    <section class="locker">
+      <div class="row">
+        <div class="door" aria-hidden="true"></div>
+        <div class="lamp" id="lamp" title="индикатор"></div>
+      </div>
+      <p class="status" id="status">Статус: LOCK / on</p>
+      <button class="btn" id="check" type="button">Проверить замок</button>
+      <button class="btn btn-ghost" id="refresh" type="button">Обновить статус</button>
       <p class="msg" id="msg" aria-live="polite"></p>
     </section>
 
-    <div class="hint-box">
+    <div class="hints">
       <details>
-        <summary>совсем застрял?</summary>
-        <p>Подсказка 1: F12 → Application (Приложение) → Local Storage → адрес этого сайта.</p>
+        <summary>Подсказка 1</summary>
+        <p>Посмотри localStorage для этого сайта. Там должен быть ключ <code>gift_lock</code>.</p>
       </details>
       <details>
-        <summary>и это не помогло</summary>
-        <p>Подсказка 2: поставь значение <code>album_lock</code> в <code>off</code>, потом жми «Проверить замок». Обновлять страницу не обязательно, но можно.</p>
+        <summary>Подсказка 2</summary>
+        <p>Поставь значение <code>off</code> вместо <code>on</code>, потом нажми «Проверить замок».</p>
       </details>
     </div>
   </main>
 
   <script>
-    const KEY = 'album_lock';
+    const KEY = 'gift_lock';
     const statusEl = document.getElementById('status');
+    const lamp = document.getElementById('lamp');
     const msg = document.getElementById('msg');
-    const continueBtn = document.getElementById('continue');
+    const checkBtn = document.getElementById('check');
 
     function ensureLock() {
-      if (localStorage.getItem(KEY) === null) {
-        localStorage.setItem(KEY, 'on');
-      }
+      if (localStorage.getItem(KEY) === null) localStorage.setItem(KEY, 'on');
     }
 
     function renderStatus() {
       ensureLock();
       const value = localStorage.getItem(KEY);
       const open = value === 'off';
-      statusEl.innerHTML = open
-        ? 'Статус замка: <strong style="color: var(--ok)">открыт</strong>. Ну наконец-то.'
-        : 'Статус замка: <strong>закрыт</strong>. Не оригинал, но работает.';
+      statusEl.textContent = open ? 'Статус: OPEN / off' : 'Статус: LOCK / on';
+      lamp.classList.toggle('open', open);
     }
 
-    async function checkAlbum() {
+    async function checkLock() {
       ensureLock();
-      const lock = localStorage.getItem(KEY);
       msg.className = 'msg';
-      msg.textContent = 'Сверяю с сервером...';
-      continueBtn.disabled = true;
+      msg.textContent = 'Проверяю...';
+      checkBtn.disabled = true;
       try {
-        const res = await fetch('/api/check-album', {
+        const res = await fetch('/api/check-lock', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ lock })
+          body: JSON.stringify({ lock: localStorage.getItem(KEY) })
         });
         const data = await res.json();
         if (data.success) {
           msg.className = 'msg ok';
-          msg.textContent = 'Альбом сдан. Дальше торт — логично.';
-          setTimeout(() => { window.location.href = data.redirectUrl; }, 800);
+          msg.textContent = 'Открыто. Дальше.';
+          setTimeout(() => { window.location.href = data.redirectUrl; }, 700);
         } else {
           msg.className = 'msg bad';
           msg.textContent = data.message || 'Ещё закрыто.';
-          continueBtn.disabled = false;
+          checkBtn.disabled = false;
           renderStatus();
         }
       } catch (e) {
         msg.className = 'msg bad';
-        msg.textContent = 'Сеть упала. Это уже не загадка.';
-        continueBtn.disabled = false;
+        msg.textContent = 'Ошибка сети.';
+        checkBtn.disabled = false;
       }
     }
 
     ensureLock();
     renderStatus();
-    document.getElementById('refresh-status').addEventListener('click', renderStatus);
-    continueBtn.addEventListener('click', checkAlbum);
+    document.getElementById('refresh').addEventListener('click', renderStatus);
+    checkBtn.addEventListener('click', checkLock);
   </script>
 </body>
 </html>
