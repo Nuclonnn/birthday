@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Егору · PostgreSQL</title>
+  <title>Егору · query room</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -200,30 +200,7 @@
       line-height: 1.65;
       color: #f5e5ff;
       font-size: 0.9rem;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.94rem;
-    }
-
-    th, td {
-      padding: 0.8rem 0.75rem;
-      border-bottom: 1px solid rgba(224, 142, 255, 0.12);
-      text-align: left;
-    }
-
-    th {
-      color: #f4d98b;
-      font-weight: 700;
-      font-size: 0.82rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    td {
-      color: var(--text);
+      min-height: 140px;
     }
 
     .submit {
@@ -289,10 +266,6 @@
         width: 100%;
         position: static;
       }
-
-      table {
-        font-size: 0.88rem;
-      }
     }
   </style>
 </head>
@@ -301,26 +274,26 @@
     <div class="topbar">
       <div>
         <div class="lvl">Уровень 2 / 3</div>
-        <h1>PostgreSQL Mindset</h1>
-        <p class="lead">Теперь без фронтовых фокусов. Представь, что тебе дали данные из StoreBook и попросили достать нужное поле. Не книга, не id. Нужен автор.</p>
+        <h1>Query Room</h1>
+        <p class="lead">Теперь без готовой выборки на блюдце. Маленькая база уже поднята в браузере. Нужен нормальный запрос и правильный автор.</p>
       </div>
 
       <aside class="help" aria-label="Помощь">
         <div class="help-head">
           <span>Помощь</span>
-          <small id="help-count">1 из 3</small>
+          <small id="help-count">0 из 3</small>
         </div>
-        <div class="help-step show">
+        <div class="help-step">
           <span class="help-label">Подсказка 1</span>
-          <p>Думай как будто пишешь <code>SELECT</code>. Нужна не вся строка, а одно конкретное поле.</p>
+          <p>Здесь надо не угадывать ответ, а реально спросить данные. Перед тобой маленькая SQL-песочница.</p>
         </div>
         <div class="help-step">
           <span class="help-label">Подсказка 2</span>
-          <p>Сначала отфильтруй книги по условиям, а уже потом выбери ту, которая подходит лучше остальных.</p>
+          <p>Нужен <code>SELECT</code> по таблице <code>books</code>. В ответе тебе нужен именно автор.</p>
         </div>
         <div class="help-step">
           <span class="help-label">Подсказка 3</span>
-          <p>Среди подходящих книг нужен автор самой дорогой позиции, которая есть в наличии и издана до 2000 года.</p>
+          <p>Условия такие: <code>amount &gt; 0</code>, <code>publishedYear &lt; 2000</code>, потом <code>order by price desc</code> и одна запись.</p>
         </div>
         <button class="help-btn" id="help-btn" type="button">Открыть следующую подсказку</button>
       </aside>
@@ -330,42 +303,28 @@
       <div class="panel">
         <div class="sql-head">
           <strong>books</strong>
-          <span class="badge">postgres / StoreBook</span>
+          <span class="badge">sqlite / StoreBook</span>
         </div>
 
         <div class="body">
           <div class="task">
-            <p>Запрос по смыслу такой: найти автора книги, которая <strong>есть в наличии</strong>, была <strong>издана до 2000 года</strong>, а среди подходящих имеет <strong>максимальную цену</strong>. Ответ отправь в поле ниже.</p>
+            <p>Мини-база уже загружена. Напиши запрос к таблице <code>books</code>, выполни его и отправь результат. Нужен автор книги, которая <strong>есть в наличии</strong>, была <strong>издана до 2000 года</strong>, а среди подходящих имеет <strong>максимальную цену</strong>.</p>
           </div>
 
           <div class="console">
-            <pre>select nameAuthor
-from books
-where amount &gt; 0 and publishedYear &lt; 2000
-order by price desc
-limit 1;</pre>
+            <pre id="sql-output">Инициализирую sqlite...</pre>
           </div>
 
-          <div>
-            <table>
-              <thead>
-                <tr>
-                  <th>title</th>
-                  <th>author</th>
-                  <th>genre</th>
-                  <th>price</th>
-                  <th>amount</th>
-                  <th>year</th>
-                </tr>
-              </thead>
-              <tbody id="rows"></tbody>
-            </table>
+          <div class="submit" style="padding:0;border-top:none;gap:1rem;">
+            <label for="query">SQL запрос</label>
+            <input id="query" type="text" autocomplete="off" spellcheck="false" placeholder="select ... from books ...">
+            <button class="primary" id="run" type="button">Выполнить запрос</button>
           </div>
         </div>
 
         <div class="submit">
           <label for="author">Имя автора</label>
-          <input id="author" type="text" autocomplete="off" spellcheck="false" placeholder="например Владимир Сорокин">
+          <input id="author" type="text" autocomplete="off" spellcheck="false" placeholder="ответ">
           <button class="primary" id="submit" type="button">Проверить ответ</button>
           <p class="msg" id="msg" aria-live="polite"></p>
         </div>
@@ -373,11 +332,12 @@ limit 1;</pre>
     </section>
   </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
     const helpSteps = Array.from(document.querySelectorAll('.help-step'));
     const helpBtn = document.getElementById('help-btn');
     const helpCount = document.getElementById('help-count');
-    let openHints = 1;
+    let openHints = 0;
 
     helpBtn.addEventListener('click', () => {
       if (openHints >= helpSteps.length) {
@@ -395,28 +355,70 @@ limit 1;</pre>
       }
     });
 
-    const rows = document.getElementById('rows');
+    const output = document.getElementById('sql-output');
+    const queryInput = document.getElementById('query');
+    const runBtn = document.getElementById('run');
     const input = document.getElementById('author');
     const msg = document.getElementById('msg');
     const btn = document.getElementById('submit');
+    let db;
 
-    fetch('/api/storebook/books/all')
-      .then((res) => res.json())
-      .then((books) => {
-        rows.innerHTML = books.map((book) => `
-          <tr>
-            <td>${book.title}</td>
-            <td>${book.nameAuthor}</td>
-            <td>${book.nameGenre}</td>
-            <td>${book.price}</td>
-            <td>${book.amount}</td>
-            <td>${book.publishedYear}</td>
-          </tr>
-        `).join('');
-      })
-      .catch(() => {
-        rows.innerHTML = '<tr><td colspan="6">Не удалось получить данные.</td></tr>';
-      });
+    async function bootDatabase() {
+      try {
+        const [SQL, res] = await Promise.all([
+          initSqlJs({ locateFile: (file) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}` }),
+          fetch('/api/storebook/books/all')
+        ]);
+        const books = await res.json();
+
+        db = new SQL.Database();
+        db.run('CREATE TABLE books (id TEXT, title TEXT, nameAuthor TEXT, nameGenre TEXT, price INTEGER, amount INTEGER, publishedYear INTEGER);');
+
+        const insert = db.prepare('INSERT INTO books VALUES (?, ?, ?, ?, ?, ?, ?);');
+        books.forEach((book) => {
+          insert.run([book.id, book.title, book.nameAuthor, book.nameGenre, book.price, book.amount, book.publishedYear]);
+        });
+        insert.free();
+
+        output.textContent = [
+          'SQLite session ready.',
+          'Таблица: books',
+          'Поля: id, title, nameAuthor, nameGenre, price, amount, publishedYear',
+          '',
+          'Теперь можно написать свой SELECT.'
+        ].join('\n');
+      } catch (error) {
+        output.textContent = 'Не удалось инициализировать sqlite.';
+        runBtn.disabled = true;
+      }
+    }
+
+    function renderResult(result) {
+      if (!result.length) {
+        output.textContent = 'Запрос выполнился, но ничего не вернул.';
+        return;
+      }
+
+      const first = result[0];
+      const lines = [first.columns.join(' | ')];
+      first.values.forEach((row) => lines.push(row.join(' | ')));
+      output.textContent = lines.join('\n');
+    }
+
+    runBtn.addEventListener('click', () => {
+      if (!db) return;
+
+      try {
+        const result = db.exec(queryInput.value);
+        renderResult(result);
+      } catch (error) {
+        output.textContent = `SQL error: ${error.message}`;
+      }
+    });
+
+    queryInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') runBtn.click();
+    });
 
     async function submitAuthor() {
       msg.className = 'msg';
@@ -452,6 +454,8 @@ limit 1;</pre>
     input.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') submitAuthor();
     });
+
+    bootDatabase();
   </script>
 </body>
 </html>

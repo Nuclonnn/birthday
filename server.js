@@ -128,7 +128,7 @@ app.post('/api/check-lock', (req, res) => {
   const author = String(req.body.author || '').trim().toLowerCase().replace(/\s+/g, ' ');
   if (author === SQL_AUTHOR) {
     setStage(res, 3);
-    return res.json({ success: true, redirectUrl: '/cake' });
+    return res.json({ success: true, redirectUrl: '/library' });
   }
   return res.json({
     success: false,
@@ -136,7 +136,7 @@ app.post('/api/check-lock', (req, res) => {
   });
 });
 
-app.get('/cake', (req, res) => {
+app.get('/library', (req, res) => {
   if (stage(req) < 3) return res.redirect('/');
   res.sendFile(pages('level3.html'));
 });

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Егору · книга</title>
+  <title>Егору · библиотека</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -299,22 +299,22 @@
     <div class="topbar">
       <div>
         <div class="lvl">Уровень 3 / 3</div>
-        <h1>Литературная полка</h1>
-        <p class="lead">Последний уровень без обязательных танцев с DevTools. Если помнишь книгу, будет быстрее. Если не помнишь, страница все равно не оставила тебя без следов.</p>
+        <h1>Библиотека</h1>
+        <p class="lead">Последний уровень. Здесь нужна просто правильная фраза.</p>
       </div>
 
       <aside class="help" aria-label="Помощь">
         <div class="help-head">
           <span>Помощь</span>
-          <small id="help-count">1 из 2</small>
+          <small id="help-count">0 из 2</small>
         </div>
-        <div class="help-step show">
+        <div class="help-step">
           <span class="help-label">Подсказка 1</span>
-          <p>Фраза связана с <em>Голубым салом</em>. Если не помнишь ее целиком, смотри на пометки на листе.</p>
+          <p>Фраза связана с <em>Голубым салом</em>. Если не помнишь, смотри на обрывок.</p>
         </div>
         <div class="help-step">
           <span class="help-label">Подсказка 2</span>
-          <p>На странице уже лежит заготовка: не хватает только первого слова перед <code>хорошо горят</code>.</p>
+          <p>Нужно восстановить только первое слово перед <code>хорошо горят</code>.</p>
         </div>
         <button class="help-btn" id="help-btn" type="button">Открыть следующую подсказку</button>
       </aside>
@@ -329,23 +329,22 @@
           </div>
           <div class="meta">
             автор: Владимир Сорокин<br>
-            пометка на полях: крылатые фразы запоминаются лучше сюжета<br>
-            статус: дочитай и скажи вслух нормально
+            книга: да<br>
+            фраза: тоже да
           </div>
         </div>
 
         <div class="sheet">
-          <p>Заметка оставлена почти честная: если ты читал, то, вероятно, узнаешь фразу быстрее, чем откроешь подсказки. Если не читал, то все равно не страшно: нужные слова лежат прямо здесь, просто не одной строкой.</p>
-          <p>Внизу сохранили обрывок цитаты. Его не надо анализировать как ребус, не надо шифровать, не надо передавать в консоль. Просто восстанови полную фразу и отправь ее как есть.</p>
+          <p>Перед тобой книга и обрывок нужной реплики. Этого достаточно.</p>
 
           <div class="quote-card">
             <p>... хорошо горят</p>
-            <div class="quote-note">Редакторская приписка: начало стерлось, но речь явно про то, что люди обычно читают, хранят и советуют друг другу.</div>
+            <div class="quote-note">Осталось только восстановить начало.</div>
           </div>
 
           <div class="submit">
             <label for="quote">Фраза целиком</label>
-            <input id="quote" type="text" autocomplete="off" spellcheck="false" placeholder="восстанови цитату полностью">
+            <input id="quote" type="text" autocomplete="off" spellcheck="false" placeholder="ответ">
             <button class="primary" id="submit" type="button">Отправить</button>
             <p class="msg" id="msg" aria-live="polite"></p>
           </div>
@@ -358,7 +357,7 @@
     const helpSteps = Array.from(document.querySelectorAll('.help-step'));
     const helpBtn = document.getElementById('help-btn');
     const helpCount = document.getElementById('help-count');
-    let openHints = 1;
+    let openHints = 0;
 
     helpBtn.addEventListener('click', () => {
       if (openHints >= helpSteps.length) {

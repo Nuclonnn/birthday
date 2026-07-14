@@ -312,9 +312,9 @@
       <aside class="help" aria-label="Помощь">
         <div class="help-head">
           <span>Помощь</span>
-          <small id="help-count">1 из 3</small>
+          <small id="help-count">0 из 3</small>
         </div>
-        <div class="help-step show">
+        <div class="help-step">
           <span class="help-label">Подсказка 1</span>
           <p>Смотри не на карточки на странице, а на то, что приходит от запроса. Интерфейс показывает не все.</p>
         </div>
@@ -353,7 +353,7 @@
 
         <div class="submit">
           <label for="code">Ключ доступа</label>
-          <input id="code" type="text" autocomplete="off" spellcheck="false" placeholder="например postgres-something-layer">
+          <input id="code" type="text" autocomplete="off" spellcheck="false" placeholder="ответ">
           <button class="primary" id="submit" type="button">Проверить</button>
           <p class="msg" id="msg" aria-live="polite"></p>
         </div>
@@ -365,7 +365,7 @@
     const helpSteps = Array.from(document.querySelectorAll('.help-step'));
     const helpBtn = document.getElementById('help-btn');
     const helpCount = document.getElementById('help-count');
-    let openHints = 1;
+    let openHints = 0;
 
     helpBtn.addEventListener('click', () => {
       if (openHints >= helpSteps.length) {
