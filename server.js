@@ -6,7 +6,7 @@ const app = express();
 
 const STOREBOOK_CODE = 'postgres-books-dataaccess';
 const SQL_AUTHOR = 'владимир сорокин';
-const QUOTE_WORDS = 'книги хорошо горят';
+const QUOTE_WORDS = 'хитрым';
 
 const STOREBOOK_BOOKS = [
   {

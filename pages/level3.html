@@ -300,7 +300,7 @@
       <div>
         <div class="lvl">Уровень 3 / 3</div>
         <h1>Библиотека</h1>
-        <p class="lead">Последний уровень. Здесь нужна просто правильная фраза.</p>
+        <p class="lead">Последний уровень. В цитате пропущено одно слово.</p>
       </div>
 
       <aside class="help" aria-label="Помощь">
@@ -310,11 +310,11 @@
         </div>
         <div class="help-step">
           <span class="help-label">Подсказка 1</span>
-          <p>Фраза связана с <em>Голубым салом</em>. Если не помнишь, смотри на обрывок.</p>
+          <p>Нужен не весь текст целиком, а только пропущенное слово.</p>
         </div>
         <div class="help-step">
           <span class="help-label">Подсказка 2</span>
-          <p>Нужно восстановить только первое слово перед <code>хорошо горят</code>.</p>
+          <p>Слово повторяется в цитате два раза. Вводить нужно именно его.</p>
         </div>
         <button class="help-btn" id="help-btn" type="button">Открыть следующую подсказку</button>
       </aside>
@@ -329,22 +329,22 @@
           </div>
           <div class="meta">
             автор: Владимир Сорокин<br>
-            книга: да<br>
-            фраза: тоже да
+            автор: Владимир Сорокин<br>
+            задача: восстановить пропуск
           </div>
         </div>
 
         <div class="sheet">
-          <p>Перед тобой книга и обрывок нужной реплики. Этого достаточно.</p>
+          <p>Перед тобой фраза с одним пропуском. Введи только пропущенное слово.</p>
 
           <div class="quote-card">
-            <p>... хорошо горят</p>
-            <div class="quote-note">Осталось только восстановить начало.</div>
+            <p>...русский писатель не должен быть _____. Грубым, наглым, злым - пожалуйста. Только не _____...</p>
+            <div class="quote-note">Пропущено одно и то же слово.</div>
           </div>
 
           <div class="submit">
-            <label for="quote">Фраза целиком</label>
-            <input id="quote" type="text" autocomplete="off" spellcheck="false" placeholder="ответ">
+            <label for="quote">Пропущенное слово</label>
+            <input id="quote" type="text" autocomplete="off" spellcheck="false" placeholder="Ответ">
             <button class="primary" id="submit" type="button">Отправить</button>
             <p class="msg" id="msg" aria-live="polite"></p>
           </div>

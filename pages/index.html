@@ -229,6 +229,12 @@
       font-size: 0.9rem;
     }
 
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
     .submit {
       padding: 1.2rem;
       display: grid;
@@ -266,6 +272,20 @@
     }
 
     button.primary:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+
+    button.secondary {
+      border: 1px solid rgba(124, 182, 255, 0.26);
+      background: rgba(124, 182, 255, 0.08);
+      color: var(--text);
+      font-weight: 700;
+      padding: 0.95rem 1.2rem;
+      cursor: pointer;
+    }
+
+    button.secondary:disabled {
       opacity: 0.55;
       cursor: wait;
     }
@@ -353,8 +373,11 @@
 
         <div class="submit">
           <label for="code">Ключ доступа</label>
-          <input id="code" type="text" autocomplete="off" spellcheck="false" placeholder="ответ">
-          <button class="primary" id="submit" type="button">Проверить</button>
+          <input id="code" type="text" autocomplete="off" spellcheck="false" placeholder="Ответ">
+          <div class="actions">
+            <button class="secondary" id="inspect" type="button">Отправить запрос</button>
+            <button class="primary" id="submit" type="button">Проверить</button>
+          </div>
           <p class="msg" id="msg" aria-live="polite"></p>
         </div>
       </div>
@@ -387,21 +410,30 @@
     const input = document.getElementById('code');
     const msg = document.getElementById('msg');
     const btn = document.getElementById('submit');
+    const inspectBtn = document.getElementById('inspect');
 
-    fetch('/api/storebook/profile')
-      .then((res) => res.json())
-      .then((data) => {
+    async function inspectProfile() {
+      inspectBtn.disabled = true;
+      preview.textContent = 'Отправляю запрос к StoreBook profile...';
+
+      try {
+        const res = await fetch('/api/storebook/profile');
+        const data = await res.json();
         preview.textContent = [
           'service: ' + data.service,
           'route: ' + data.route,
           'controller: ' + data.controller,
           'controllers: ' + data.controllers.join(', '),
-          'clue: ' + data.clue
+          'clue: ' + data.clue,
+          '',
+          'Посмотри этот же запрос в Network целиком.'
         ].join('\n');
-      })
-      .catch(() => {
+      } catch (error) {
         preview.textContent = 'Не удалось получить профиль сервиса.';
-      });
+      } finally {
+        inspectBtn.disabled = false;
+      }
+    }
 
     async function submitCode() {
       msg.className = 'msg';
@@ -434,6 +466,7 @@
     }
 
     btn.addEventListener('click', submitCode);
+    inspectBtn.addEventListener('click', inspectProfile);
     input.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') submitCode();
     });
